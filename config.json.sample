@@ -1,0 +1,9 @@
+{
+    "jenkins": {
+        "host": "host from jenkins",
+        "port": port from jenkins,
+        "path": "/api/json",
+        "user": "the user",
+        "password": "the passwort of the user"
+    }
+}

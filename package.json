@@ -1,0 +1,10 @@
+{
+    "name": "TestApp",
+    "version": "0.0.1",
+    "description": "test app",
+    "dependencies": {
+        "onoff": "latest",
+        "async": "latest"
+    },
+    "author": "Jonas Schmid"
+}
