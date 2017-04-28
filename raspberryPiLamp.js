@@ -87,7 +87,7 @@ Lamp.prototype.disableAll = function() {
 
 function enableLed(led, interval) {
     clearInterval(interval);
-    led.write(1, function() {
+    led.write(0, function() {
         console.log("Enable led " + led );
     });
 }
@@ -104,7 +104,7 @@ function blinkLed(led, interval) {
 
 function disableLed(led, interval) {
     clearInterval(interval);
-    led.write(0, function() {
+    led.write(1, function() {
         console.log("Disable led " + led );
     });
 }

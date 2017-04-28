@@ -62,13 +62,13 @@ JenkinsLamp.prototype.callJenkins = function() {
         res.on('data', (d) => {
             let jsonData = JSON.parse(d);
             //console.log(JSON.stringify(jsonData));
-            this.saveJenkinsData(jsonData);
             if (jsonData && jsonData.jobs) {
                 for (let jobIndex in jsonData.jobs) {
                     let job = jsonData.jobs[jobIndex];
                     console.log('job : ' + job.name + ' => ' + job.color);
                 }
             }
+            this.saveJenkinsData(jsonData);
         });
 
     }).on('error', (e) => {
