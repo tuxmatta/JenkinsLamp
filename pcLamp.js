@@ -4,14 +4,13 @@
 function Lamp() {
     var intervalRed, intervalOrange, intervalGreen,
         ledRed, ledOrange, ledGreen;
-    console.log('Lamp constructor');
 };
 
-function Led(name, state) {
+function Led(name, state, color) {
     var name, state;
-    console.log('Led constructor (' + name + ', ' + state + ')');
     this.name = name;
     this.state = state;
+    this.color = color;
 };
 Led.prototype.toString = function() {
     return 'Led:  name=' + this.name + ' state=' + this.state;
@@ -22,17 +21,21 @@ Led.prototype.info = function() {
 Led.prototype.disable = function() {
     this.state = 0;
 }
+Led.prototype.printLed = function() {
+    if(this.state === 0) {
+        console.log(' ○');
+    } else {
+        console.log(this.color, '◉', '\x1b[0m');
+    }
+}
 
 Lamp.prototype.startup = function() {
-    this.ledRed = new Led('red', 0);
-    this.ledOrange = new Led('orange', 0);
-    this.ledGreen = new Led('green', 0);
-    console.log('pcLamp start');
+    this.ledRed = new Led('red', 0, '\x1b[31m');
+    this.ledOrange = new Led('orange', 0, '\x1b[33m');
+    this.ledGreen = new Led('green', 1, '\x1b[32m');
 };
-
 Lamp.prototype.shutdown = function() {
     this.disableAll();
-    console.log('pcLamp shutdown');
 };
 
 Lamp.prototype.enableRed = function() {
@@ -72,7 +75,6 @@ Lamp.prototype.disableGreen = function() {
 }
 
 Lamp.prototype.disableAll = function() {
-    console.log('disableAll');
     disableLed(this.ledRed, this.intervalRed);
     disableLed(this.ledOrange, this.intervalOrange);
     disableLed(this.ledGreen, this.intervalGreen);
@@ -81,7 +83,7 @@ Lamp.prototype.disableAll = function() {
 function enableLed(led, interval) {
     clearInterval(interval);
     led.state = 1;
-    console.log(' -> Enable led "' + led.name + '"');
+    led.printLed();
 }
 
 function blinkLed(led, interval) {
@@ -90,18 +92,17 @@ function blinkLed(led, interval) {
         var value = (led.state + 1) % 2;
         if (value == 0) {
             led.state = 0;
-            console.log(' -> Disable led "' + led.name + '"');
         } else {
             led.state = 1;
-            console.log(' -> Enable led "' + led.name + '"');
         }
+        led.printLed();
     }, 2000);
 }
 
 function disableLed(led, interval) {
     clearInterval(interval);
     led.state = 0;
-    console.log(' -> Disable led "' + led.name + '"');
+    led.printLed();
 }
 
 // export the class
