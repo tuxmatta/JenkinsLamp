@@ -65,7 +65,8 @@ JenkinsLamp.prototype.callJenkins = function() {
             if (jsonData && jsonData.jobs) {
                 for (let jobIndex in jsonData.jobs) {
                     let job = jsonData.jobs[jobIndex];
-                    console.log('job : ' + job.name + ' => ' + job.color);
+                    let state = this.colorify(job.color);
+                    console.log(job.name + ' : ' + state);
                 }
             }
             this.saveJenkinsData(jsonData);
@@ -74,7 +75,17 @@ JenkinsLamp.prototype.callJenkins = function() {
     }).on('error', (e) => {
         console.error(e);
     });
-};
+}
+
+JenkinsLamp.prototype.colorify = function(color, text=color) {
+    if(color.startsWith('red'))
+        return '\x1b[31m' + text + '\x1b[0m';
+    if(color.startsWith('yellow'))
+        return '\x1b[33m' + text + '\x1b[0m';
+    if(color.startsWith('blue'))
+        return '\x1b[34m' + text + '\x1b[0m';
+    return text;
+}
 
 JenkinsLamp.prototype.saveJenkinsData = function(jenkinsData) {
     // TODO: validate jenkinsData before saveJenkinsData
@@ -84,7 +95,6 @@ JenkinsLamp.prototype.saveJenkinsData = function(jenkinsData) {
 }
 
 JenkinsLamp.prototype.processJenkinsData = function() {
-    console.log('processJenkinsData');
     if (this.jenkinsData && this.jenkinsData.jobs) {
         let jobs = this.jenkinsData.jobs;
 
@@ -131,8 +141,6 @@ JenkinsLamp.prototype.hasAnimeJob = function(jobs) {
 }
 
 JenkinsLamp.prototype.updateLamp = function() {
-    console.log('updateLamp');
-
     // red lamp
     if (this.lampData.red === LampState.ON) {
         this.Lamp.enableRed();
