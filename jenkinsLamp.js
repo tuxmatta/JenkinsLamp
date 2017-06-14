@@ -96,7 +96,9 @@ JenkinsLamp.prototype.saveJenkinsData = function(jenkinsData) {
 
 JenkinsLamp.prototype.processJenkinsData = function() {
     if (this.jenkinsData && this.jenkinsData.jobs) {
-        let jobs = this.jenkinsData.jobs;
+        let jobs = this.jenkinsData.jobs.filter(function(job) {
+            return config.jenkins.ignore.indexOf(job.name) == -1;
+        });
 
         // disable all lamps
         this.lampData.red = LampState.OFF;

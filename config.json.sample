@@ -4,6 +4,7 @@
         "port": port from jenkins,
         "path": "/api/json",
         "user": "the user",
-        "password": "the passwort of the user"
+        "password": "the passwort of the user",
+        "ignore": ["job-name-to-exclude"]
     }
 }
