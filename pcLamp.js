@@ -23,9 +23,9 @@ Led.prototype.disable = function() {
 }
 Led.prototype.printLed = function() {
     if(this.state === 0) {
-        console.log(' ○');
+        console.log(' |○ |');
     } else {
-        console.log(this.color, '◉', '\x1b[0m');
+        console.log(this.color, '|◉ |', '\x1b[0m');
     }
 }
 

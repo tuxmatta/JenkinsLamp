@@ -143,6 +143,7 @@ JenkinsLamp.prototype.hasAnimeJob = function(jobs) {
 }
 
 JenkinsLamp.prototype.updateLamp = function() {
+    console.log(' ˏ__ˎ');
     // red lamp
     if (this.lampData.red === LampState.ON) {
         this.Lamp.enableRed();
@@ -163,6 +164,8 @@ JenkinsLamp.prototype.updateLamp = function() {
     } else {
         this.Lamp.disableGreen();
     }
+    console.log(' \\ˉˉ/');
+    console.log('  ⎞⎛');
 }
 
 JenkinsLamp.prototype.work = function() {
