@@ -4,6 +4,8 @@ var clear = require('clear');
 const util = require('util');
 const https = require('https');
 
+clear();
+
 // config
 var delay = getConfigValue(config.jenkins.delay, 60000)
 var ignoreJobs = getConfigValue(config.jenkins.ignores, [""]);
@@ -36,11 +38,12 @@ function LampData() {
 }
 
 function JenkinsLamp() {
-    var jenkinsData, lampState;
+    var jenkinsData, lampState, firstLoop;
 
     // initialize data
     this.jenkinsData = {};
     this.lampData = new LampData();
+    this.firstLoop = true;
 
     // initialize Lamp
     this.Lamp = new Lamp();
@@ -215,16 +218,20 @@ JenkinsLamp.prototype.updateLamp = function() {
 
 JenkinsLamp.prototype.work = function() {
     let self = this;
-    async.forever(
 
+    async.forever(
         function(next) {
-            clear();
+            if (self.firstLoop) {
+              self.firstLoop = false;
+            } else {
+              clear();
+            }
 
             self.callJenkinsNova();
 
             setTimeout(function() {
                 self.callJenkins();
-            }, 50);
+            }, 150);
 
             setTimeout(function() {
                 next();
