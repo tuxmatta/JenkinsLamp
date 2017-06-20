@@ -21,3 +21,14 @@ http://raspberrypiguide.de/howtos/raspberry-pi-gpio-how-to/
     sudo mv node-v6.10.2-linux-armv6l nodejs
     sudo ln -s /opt/nodejs/bin/node /usr/bin/node
     sudo ln -s /opt/nodejs/bin/npm /usr/bin/npm
+
+## Setup a service
+
+tbd
+
+# Start and stop
+
+    service JenkinsLamp start
+    service JenkinsLamp status
+    service JenkinsLamp stop
+    
