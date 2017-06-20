@@ -3,8 +3,11 @@
         "host": "host from jenkins",
         "port": port from jenkins,
         "path": "/api/json",
+        "pathNova": "/job/s16-backend-nova/api/json?tree=activeConfigurations[name,color,url]",
         "user": "the user",
         "password": "the passwort of the user",
+        "useLibrary": "pcLamp.js",
+        "delay": 10000,
         "ignore": ["job-name-to-exclude"]
     }
 }
