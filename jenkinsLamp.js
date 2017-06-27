@@ -125,6 +125,29 @@ JenkinsLamp.prototype.callJenkinsNova = function() {
     });
 }
 
+JenkinsLamp.prototype.callHealthCheck = function() {
+  if (config.healthcheck && config.healthcheck.hosts && config.healthcheck.path) {
+    console.log('------------------------------');
+    config.healthcheck.hosts.forEach(host =>  {
+      let options = {
+          host: host,
+          path: config.healthcheck.path
+      };
+      https.get(options, (res) => {
+          if (res.statusCode == 200) {
+            console.log(host + ' : ' + this.colorify('blue', 'up'));
+          }
+          else {
+            console.log(host + ' : ' + this.colorify('red', 'down (' + res.statusCode + ')'));
+          }
+      }).on('error', (e) => {
+          console.error(e);
+      });
+    });
+  }
+}
+
+
 JenkinsLamp.prototype.colorify = function(color, text=color) {
     if(color.startsWith('red'))
         return '\x1b[31m' + text + '\x1b[0m';
@@ -231,6 +254,10 @@ JenkinsLamp.prototype.work = function() {
 
             setTimeout(function() {
                 self.callJenkins();
+            }, 150);
+
+            setTimeout(function() {
+                self.callHealthCheck();
             }, 150);
 
             setTimeout(function() {
