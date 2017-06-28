@@ -1,17 +1,34 @@
 var config = require('./config.json');
 var async = require("async");
+var clear = require('clear');
 const util = require('util');
 const https = require('https');
 
-var delay = 30000;
-var Lamp = require("./pcLamp.js");
-//var Lamp = require("./raspberryPiLamp.js");
+clear();
+
+// config
+var delay = getConfigValue(config.jenkins.delay, 60000)
+var ignoreJobs = getConfigValue(config.jenkins.ignores, [""]);
+var useLibrary = getConfigValue(config.jenkins.useLibrary, "pcLamp.js")
+console.log('=> delay is ' + delay + 'ms');
+console.log('=> ignore jobs: ' + ignoreJobs);
+console.log('=> use the output library: ' + useLibrary);
+
+// select library
+var Lamp = require("./" + useLibrary);
 
 var LampState = {
     ON: 1,
     OFF: 2,
     BLINK: 3
 };
+
+function getConfigValue(value, defaultValue) {
+  if(value === undefined ) {
+    return defaultValue;
+  };
+  return value;
+}
 
 function LampData() {
     var red, orange, green;
@@ -21,11 +38,12 @@ function LampData() {
 }
 
 function JenkinsLamp() {
-    var jenkinsData, lampState;
+    var jenkinsData, lampState, firstLoop;
 
     // initialize data
     this.jenkinsData = {};
     this.lampData = new LampData();
+    this.firstLoop = true;
 
     // initialize Lamp
     this.Lamp = new Lamp();
@@ -65,7 +83,8 @@ JenkinsLamp.prototype.callJenkins = function() {
             if (jsonData && jsonData.jobs) {
                 for (let jobIndex in jsonData.jobs) {
                     let job = jsonData.jobs[jobIndex];
-                    console.log('job : ' + job.name + ' => ' + job.color);
+                    let state = this.colorify(job.color);
+                    console.log(job.name + ' : ' + state);
                 }
             }
             this.saveJenkinsData(jsonData);
@@ -74,7 +93,47 @@ JenkinsLamp.prototype.callJenkins = function() {
     }).on('error', (e) => {
         console.error(e);
     });
-};
+}
+
+JenkinsLamp.prototype.callJenkinsNova = function() {
+    let options = {
+        host: config.jenkins.host,
+        port: config.jenkins.port,
+        path: config.jenkins.pathNova,
+        headers: {
+            'Authorization': 'Basic ' + new Buffer(config.jenkins.user + ':' + config.jenkins.password).toString('base64')
+        }
+    };
+    https.get(options, (res) => {
+        res.on('data', (d) => {
+            let jsonData = JSON.parse(d);
+            //console.log(JSON.stringify(jsonData));
+            if (jsonData && jsonData.activeConfigurations) {
+              console.log('------------------------------');
+                for (let configIndex in jsonData.activeConfigurations) {
+                    let config = jsonData.activeConfigurations[configIndex];
+                    let state = this.colorify(config.color);
+                    console.log(config.name + ' : ' + state);
+                }
+                console.log('------------------------------');
+            }
+            //this.saveJenkinsData(jsonData);
+        });
+
+    }).on('error', (e) => {
+        console.error(e);
+    });
+}
+
+JenkinsLamp.prototype.colorify = function(color, text=color) {
+    if(color.startsWith('red'))
+        return '\x1b[31m' + text + '\x1b[0m';
+    if(color.startsWith('yellow'))
+        return '\x1b[33m' + text + '\x1b[0m';
+    if(color.startsWith('blue'))
+        return '\x1b[34m' + text + '\x1b[0m';
+    return text;
+}
 
 JenkinsLamp.prototype.saveJenkinsData = function(jenkinsData) {
     // TODO: validate jenkinsData before saveJenkinsData
@@ -84,9 +143,10 @@ JenkinsLamp.prototype.saveJenkinsData = function(jenkinsData) {
 }
 
 JenkinsLamp.prototype.processJenkinsData = function() {
-    console.log('processJenkinsData');
     if (this.jenkinsData && this.jenkinsData.jobs) {
-        let jobs = this.jenkinsData.jobs;
+        let jobs = this.jenkinsData.jobs.filter(function(job) {
+            return config.jenkins.ignore.indexOf(job.name) == -1;
+        });
 
         // disable all lamps
         this.lampData.red = LampState.OFF;
@@ -131,8 +191,7 @@ JenkinsLamp.prototype.hasAnimeJob = function(jobs) {
 }
 
 JenkinsLamp.prototype.updateLamp = function() {
-    console.log('updateLamp');
-
+    console.log(' ˏ__ˎ');
     // red lamp
     if (this.lampData.red === LampState.ON) {
         this.Lamp.enableRed();
@@ -153,18 +212,30 @@ JenkinsLamp.prototype.updateLamp = function() {
     } else {
         this.Lamp.disableGreen();
     }
+    console.log(' \\ˉˉ/');
+    console.log('  ⎞⎛');
 }
 
 JenkinsLamp.prototype.work = function() {
     let self = this;
-    async.forever(
 
+    async.forever(
         function(next) {
-            self.callJenkins();
+            if (self.firstLoop) {
+              self.firstLoop = false;
+            } else {
+              clear();
+            }
+
+            self.callJenkinsNova();
+
+            setTimeout(function() {
+                self.callJenkins();
+            }, 150);
 
             setTimeout(function() {
                 next();
-            }, delay)
+            }, delay);
         },
         function(err) {
             console.error(err);

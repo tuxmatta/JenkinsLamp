@@ -4,7 +4,8 @@
     "description": "test app",
     "dependencies": {
         "onoff": "latest",
-        "async": "latest"
+        "async": "latest",
+        "clear": "latest"
     },
     "author": "Jonas Schmid"
 }
