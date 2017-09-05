@@ -7,7 +7,7 @@ function Lamp() {
 };
 
 function Led(name, state, color) {
-    var name, state;
+    var name, state, color;
     this.name = name;
     this.state = state;
     this.color = color;
@@ -35,43 +35,43 @@ Lamp.prototype.startup = function() {
     this.ledGreen = new Led('green', 1, '\x1b[32m');
 };
 Lamp.prototype.shutdown = function() {
-    this.disableAll();
+    //this.disableAll();
 };
 
 Lamp.prototype.enableRed = function() {
-    enableLed(this.ledRed, this.intervalRed);
+    //enableLed(this.ledRed, this.intervalRed);
 }
 
 Lamp.prototype.enableOrange = function() {
-    enableLed(this.ledOrange, this.intervalOrange);
+    //enableLed(this.ledOrange, this.intervalOrange);
 }
 
 Lamp.prototype.enableGreen = function() {
-    enableLed(this.ledGreen, this.intervalGreen);
+    //enableLed(this.ledGreen, this.intervalGreen);
 }
 
 Lamp.prototype.blinkRed = function() {
-    blinkLed(this.ledRed, this.intervalRed);
+    //blinkLed(this.ledRed, this.intervalRed);
 }
 
 Lamp.prototype.blinkOrange = function() {
-    blinkLed(this.ledOrange, this.intervalOrange);
+    //blinkLed(this.ledOrange, this.intervalOrange);
 }
 
 Lamp.prototype.blinkGreen = function() {
-    blinkLed(this.ledGreen, this.intervalGreen);
+    //blinkLed(this.ledGreen, this.intervalGreen);
 }
 
 Lamp.prototype.disableRed = function() {
-    disableLed(this.ledRed, this.intervalRed);
+    //disableLed(this.ledRed, this.intervalRed);
 }
 
 Lamp.prototype.disableOrange = function() {
-    disableLed(this.ledOrange, this.intervalOrange);
+    //disableLed(this.ledOrange, this.intervalOrange);
 }
 
 Lamp.prototype.disableGreen = function() {
-    disableLed(this.ledGreen, this.intervalGreen);
+    //disableLed(this.ledGreen, this.intervalGreen);
 }
 
 Lamp.prototype.disableAll = function() {

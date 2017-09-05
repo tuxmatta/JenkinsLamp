@@ -1,11 +1,18 @@
 {
-    "name": "TestApp",
-    "version": "0.0.1",
-    "description": "test app",
-    "dependencies": {
-        "onoff": "latest",
-        "async": "latest",
-        "clear": "latest"
-    },
-    "author": "Jonas Schmid"
+  "name": "TestApp",
+  "version": "0.0.1",
+  "description": "test app",
+  "scripts": {
+    "start": "node jenkinsLamp.js"
+  },
+  "dependencies": {
+    "async": "latest",
+    "chalk": "^2.1.0",
+    "clear": "latest",
+    "jsonpath": "^0.2.11",
+    "onoff": "latest",
+    "pad": "^1.1.0",
+    "tfunk": "^3.1.0"
+  },
+  "author": "Jonas Schmid"
 }
