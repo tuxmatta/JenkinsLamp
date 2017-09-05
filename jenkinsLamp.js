@@ -206,7 +206,7 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
       colorResults = jenkinsLamp.filterJenkinsJobs(colorResults, lamp.job.ignore);
 
       for (colorResult of colorResults) {
-        if (colorResult.name) {
+        if (colorResult && colorResult.name) {
           console.log(tfunk(colorResult.name + ' : {' + colorResult.color + ':' + colorResult.color + '}'));
         } else {
           console.log(tfunk('{green:' + colorResults + '}'));
@@ -236,7 +236,7 @@ JenkinsLamp.prototype.updateJenkinsStateFromCondition = function(lamp, colorResu
   lamp.orange = LampState.OFF;
   lamp.green = LampState.OFF;
 
-  if (colorResults[0].indexOf('failed') >= 0) {
+  if (colorResults[0] && colorResults[0].indexOf('failed') >= 0) {
     lamp.red = LampState.ON;
   } else  {
     lamp.green = LampState.ON;
@@ -295,10 +295,11 @@ JenkinsLamp.prototype.getColor = function(colorResult) {
 }
 
 JenkinsLamp.prototype.filterJenkinsJobs = function(colorResults, ignores) {
-  //console.log(ignores);
   return colorResults.filter(function(colorResult){
-    //console.log('filter: exists ' + colorResult.name + ' in ' + ignores + ' => ' + !ignores.includes(colorResult.name));
-    return !ignores.includes(colorResult.name);
+    if(colorResult) {
+      return !ignores.includes(colorResult.name);
+    }
+    return true;
   });
 }
 
