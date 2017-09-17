@@ -126,7 +126,7 @@ JenkinsLamp.prototype.work = function() {
 
 JenkinsLamp.prototype.displayLamps = function(lampList) {
   for (lamp of lampList) {
-    if (lamp.id === 'all Jobs') {
+    if (lamp.id === 'dev. job') {
 
       lamp.red === LampState.ON ? this.Lamp.enableRed() : this.Lamp.disableRed();
       lamp.orange === LampState.ON ? this.Lamp.enableOrange() : this.Lamp.disableOrange();

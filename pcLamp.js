@@ -39,15 +39,18 @@ Lamp.prototype.shutdown = function() {
 };
 
 Lamp.prototype.enableRed = function() {
-    //enableLed(this.ledRed, this.intervalRed);
+  // console.log('>>> enableRed');
+  // enableLed(this.ledRed, this.intervalRed);
 }
 
 Lamp.prototype.enableOrange = function() {
-    //enableLed(this.ledOrange, this.intervalOrange);
+  // console.log('>>> enableOrange');
+  // enableLed(this.ledOrange, this.intervalOrange);
 }
 
 Lamp.prototype.enableGreen = function() {
-    //enableLed(this.ledGreen, this.intervalGreen);
+  // console.log('>>> enableGreen');
+  // enableLed(this.ledGreen, this.intervalGreen);
 }
 
 Lamp.prototype.blinkRed = function() {
