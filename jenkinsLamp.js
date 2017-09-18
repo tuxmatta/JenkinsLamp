@@ -93,30 +93,34 @@ JenkinsLamp.prototype.work = function() {
 
   async.forever(
     function(next) {
-      if (self.firstLoop) {
-        self.firstLoop = false;
-      } else {
-        clear();
-      }
-
-      async.each(self.lampList.filter(function(lamp){
-        return lamp.enabled;
-      }), self.callJenkins, function(err) {
-        // if any of the file processing produced an error, err would equal that error
-        if (err) {
-          // One of the iterations produced an error.
-          // All processing will now stop.
-          console.log('A file failed to process');
+      try {
+        if (self.firstLoop) {
+          self.firstLoop = false;
         } else {
-          console.log('All files have been processed successfully');
-
-          self.displayLamps(self.lampList);
-          self.displayOutput(self.lampList);
+          clear();
         }
-      });
-      setTimeout(function() {
-        next();
-      }, delay);
+
+        async.each(self.lampList.filter(function(lamp){
+          return lamp.enabled;
+        }), self.callJenkins, function(err) {
+          // if any of the file processing produced an error, err would equal that error
+          if (err) {
+            // One of the iterations produced an error.
+            // All processing will now stop.
+            console.log('A file failed to process');
+          } else {
+            console.log('All files have been processed successfully');
+
+            self.displayLamps(self.lampList);
+            self.displayOutput(self.lampList);
+          }
+        });
+        setTimeout(function() {
+          next();
+        }, delay);
+      } catch (err) {
+        console.error(err);
+      }
     },
     function(err) {
       console.error(err);
