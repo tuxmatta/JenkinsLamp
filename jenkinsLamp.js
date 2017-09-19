@@ -259,11 +259,11 @@ JenkinsLamp.prototype.updateJenkinsStateFromColor = function(lamp, colorResults)
   lamp.orange = LampState.OFF;
   lamp.green = LampState.OFF;
 
-  //console.log('************************');
-  //console.log(colorResults);
+  // console.log('************************');
+  // console.log(colorResults);
 
   // red lamp is on, if one of the jobs has a red or red_anime state
-  for (colorResult of colorResults) {
+  for (let colorResult of colorResults) {
     if (this.getColor(colorResult).startsWith('red')) {
       lamp.red = LampState.ON;
       break;
@@ -272,8 +272,8 @@ JenkinsLamp.prototype.updateJenkinsStateFromColor = function(lamp, colorResults)
 
   // orange lamp is on, if one jobs has yellow state and nobody has red state
   if (lamp.red === LampState.OFF) {
-    for (colorResult of colorResults) {
-      if (colorResult.color && colorResult.color.startsWith('yellow')) {
+    for (let colorResult of colorResults) {
+      if (colorResult.startsWith('yellow')) {
         lamp.orange = LampState.ON;
         break;
       }
