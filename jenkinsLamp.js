@@ -119,10 +119,12 @@ JenkinsLamp.prototype.work = function() {
           next();
         }, delay);
       } catch (err) {
+        console.error('Error in the "next" from async.forever:');
         console.error(err);
       }
     },
     function(err) {
+      console.error('Error in error function from async.forever:');
       console.error(err);
     }
   );
@@ -226,8 +228,9 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
       }
       callback();
     }).on('error', (e) => {
+      console.error('Error in the "callJenkins" method:');
       console.error(e);
-      throw e;
+      // throw e;
     });
   });
 };
