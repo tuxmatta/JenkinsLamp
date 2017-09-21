@@ -203,30 +203,35 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
   };
   https.get(options, (res) => {
     res.on('data', (d) => {
-      //console.log(d.toString());
-      let jsonData = JSON.parse(d);
-      console.log('----------------------------');
-      console.log('call ' + lamp.id + ' : "' + lamp.name + '"');
-      let colorResults = jp.query(jsonData, lamp.job.colorJsonPath);
+      try {
+        //console.log(d.toString());
+        let jsonData = JSON.parse(d);
+        console.log('----------------------------');
+        console.log('call ' + lamp.id + ' : "' + lamp.name + '"');
+        let colorResults = jp.query(jsonData, lamp.job.colorJsonPath);
 
-      colorResults = jenkinsLamp.filterJenkinsJobs(colorResults, lamp.job.ignore);
+        colorResults = jenkinsLamp.filterJenkinsJobs(colorResults, lamp.job.ignore);
 
-      for (colorResult of colorResults) {
-        if (colorResult && colorResult.name) {
-          console.log(tfunk(colorResult.name + ' : {' + colorResult.color + ':' + colorResult.color + '}'));
-        } else {
-          console.log(tfunk('{green:' + colorResults + '}'));
+        for (colorResult of colorResults) {
+          if (colorResult && colorResult.name) {
+            console.log(tfunk(colorResult.name + ' : {' + colorResult.color + ':' + colorResult.color + '}'));
+          } else {
+            console.log(tfunk('{green:' + colorResults + '}'));
+          }
         }
-      }
 
-      switch (lamp.job.type) {
-        case JobState.CONDITION:
-          jenkinsLamp.updateJenkinsStateFromCondition(lamp, colorResults);
-          break;
-        default:
-          jenkinsLamp.updateJenkinsStateFromColor(lamp, colorResults);
+        switch (lamp.job.type) {
+          case JobState.CONDITION:
+            jenkinsLamp.updateJenkinsStateFromCondition(lamp, colorResults);
+            break;
+          default:
+            jenkinsLamp.updateJenkinsStateFromColor(lamp, colorResults);
+        }
+        callback();
+      } catch (err) {
+        console.error('Error in the "callJenkins.on" method:');
+        console.error(e);
       }
-      callback();
     }).on('error', (e) => {
       console.error('Error in the "callJenkins" method:');
       console.error(e);
@@ -273,7 +278,7 @@ JenkinsLamp.prototype.updateJenkinsStateFromColor = function(lamp, colorResults)
   // orange lamp is on, if one jobs has yellow state and nobody has red state
   if (lamp.red === LampState.OFF) {
     for (let colorResult of colorResults) {
-      if (colorResult.startsWith('yellow')) {
+      if (this.getColor(colorResult).startsWith('yellow')) {
         lamp.orange = LampState.ON;
         break;
       }
@@ -287,7 +292,7 @@ JenkinsLamp.prototype.updateJenkinsStateFromColor = function(lamp, colorResults)
 
   // orange lamp is also on, if one of the jobs color ends with '_anime'
   for (colorResult of colorResults) {
-    if (colorResult.color && colorResult.color.endsWith('_anime')) {
+    if (this.getColor(colorResult).endsWith('_anime')) {
       lamp.orange = LampState.ON;
       break;
     }
