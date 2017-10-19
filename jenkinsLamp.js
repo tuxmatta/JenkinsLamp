@@ -270,7 +270,7 @@ JenkinsLamp.prototype.updateJenkinsStateFromColor = function(lamp, colorResults)
   // red lamp is on, if one of the jobs has a red or red_anime state
   for (let colorResult of colorResults) {
     if (this.getColor(colorResult).startsWith('red')
-      || this.getColor(colorResult).startsWith('abort')) {
+      || this.getColor(colorResult).startsWith('aborted')) {
       lamp.red = LampState.ON;
       break;
     }
