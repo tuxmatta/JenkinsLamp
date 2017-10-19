@@ -110,7 +110,6 @@ JenkinsLamp.prototype.work = function() {
             console.log('A file failed to process');
           } else {
             console.log('All files have been processed successfully');
-
             self.displayLamps(self.lampList);
             self.displayOutput(self.lampList);
           }
@@ -202,6 +201,7 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
     }
   };
   https.get(options, (res) => {
+
     res.on('data', (d) => {
       try {
         //console.log(d.toString());
@@ -230,14 +230,15 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
         callback();
       } catch (err) {
         console.error('Error in the "callJenkins.on" method:');
-        console.error(e);
+        console.error(err);
       }
-    }).on('error', (e) => {
+    });
+
+  }).on('error', (e) => {
       console.error('Error in the "callJenkins" method:');
       console.error(e);
       // throw e;
     });
-  });
 };
 
 JenkinsLamp.prototype.updateJenkinsStateFromCondition = function(lamp, colorResults) {
