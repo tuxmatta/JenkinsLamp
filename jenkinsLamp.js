@@ -161,24 +161,24 @@ JenkinsLamp.prototype.displayOutput = function(lampList) {
       lines[0] += jobId;
     }
 
-    lines[1] += '    ˏ__ˎ    ';
+   lines[1] += '    .__.    ';
     if (lamp.red === LampState.OFF) {
-      lines[2] += '    |○ |    ';
+      lines[2] += '    |O |    ';
     } else {
-      lines[2] += '    {red:|◉ |}    ';
+      lines[2] += '    {red:|@ |}    ';
     }
     if (lamp.orange === LampState.OFF) {
-      lines[3] += '    |○ |    ';
+      lines[3] += '    |O |    ';
     } else {
-      lines[3] += '    {yellow:|◉ |}    ';
+      lines[3] += '    {yellow:|@ |}    ';
     }
     if (lamp.green === LampState.OFF) {
-      lines[4] += '    |○ |    ';
+      lines[4] += '    |O |    ';
     } else {
-      lines[4] += '    {green:|◉ |}    ';
+      lines[4] += '    {green:|@ |}    ';
     }
-    lines[5] += '    \\ˉˉ/    ';
-    lines[6] += '    ˏ⎞⎛ˎ    ';
+    lines[5] += '    \\TT/    ';
+    lines[6] += '     ||     ';
   }
 
   console.log(tfunk(lines[0]));
