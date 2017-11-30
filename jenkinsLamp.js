@@ -2,6 +2,7 @@ var config = require('./config.json');
 var async = require("async");
 var clear = require('clear');
 const util = require('util');
+const http = require('http');
 const https = require('https');
 const jp = require('jsonpath');
 const tfunk = require("tfunk");
@@ -86,6 +87,29 @@ JenkinsLamp.prototype.initShutdown = function() {
     console.log('Bye, bye!');
     process.exit();
   });
+};
+
+JenkinsLamp.prototype.workNotParallel = function() {
+
+  for (lampData of this.lampList) {
+    if (lampData.enabled) {
+      this.callJenkins(lampData, function(err) {
+        // if any of the file processing produced an error, err would equal that error
+        if (err) {
+          // One of the iterations produced an error.
+          // All processing will now stop.
+          console.log('A file failed to process');
+        } else {
+          console.log('All files have been processed successfully');
+          self.displayLamps(self.lampList);
+          self.displayOutput(self.lampList);
+        }
+      });
+    }
+  }
+
+  // loop
+  setTimeout(jenkinsLamp.work, this.delay);
 };
 
 JenkinsLamp.prototype.work = function() {
@@ -200,7 +224,7 @@ JenkinsLamp.prototype.callJenkins = function(lamp, callback) {
       'Authorization': 'Basic ' + new Buffer(config.jenkins.user + ':' + config.jenkins.password).toString('base64')
     }
   };
-  https.get(options, (res) => {
+  http.get(options, (res) => {
 
     res.on('data', (d) => {
       try {
