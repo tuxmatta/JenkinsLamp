@@ -1,13 +1,44 @@
 {
-    "jenkins": {
-        "host": "host from jenkins",
-        "port": port from jenkins,
-        "path": "/api/json",
-        "pathNova": "/job/s16-backend-nova/api/json?tree=activeConfigurations[name,color,url]",
-        "user": "the user",
-        "password": "the passwort of the user",
-        "useLibrary": "pcLamp.js",
-        "delay": 10000,
-        "ignore": ["job-name-to-exclude"]
+  "jenkins": {
+    "host": "host from jenkins",
+    "port": host from jenkins,
+    "path": "/api/json?tree=jobs[name,color]",
+    "pathNova": "/job/s16-backend-nova/api/json?tree=activeConfigurations[name,color,url]",
+    "user": "the user",
+    "password": "the password",
+    "useLibrary": "pcLamp.js",
+    "delay": 60000
+  },
+  "lamps": [{
+    "id": "dev. job",
+    "name": "develop  multibranch job",
+    "enabled" : true,
+    "job" : {
+      "type" : "color",
+      "path": "/job/s16/job/s16-multibranch-pipeline/job/develop/api/json?tree=name,color",
+      "ignore": [],
+      "colorJsonPath": "color"
     }
+
+  }, {
+    "id": "other Jobs",
+    "name": "all other jobs exclude 's16-backend-nova' and 's16-multibranch-pipeline'",
+    "enabled" : true,
+    "job" : {
+      "type" : "color",
+      "path": "/job/s16/api/json?tree=jobs[name,color]",
+      "ignore": ["s16-backend-nova"],
+      "colorJsonPath": "$.jobs[?(@.color)]"
+    }
+  }, {
+    "id": "nova Job",
+    "name": "observe activeConfigurations of the job s16-backend-nova",
+    "enabled" : true,
+    "job" : {
+      "type" : "condition",
+      "path": "/job/s16/job/s16-backend-nova/lastBuild/api/json?tree=description",
+      "ignore": [],
+      "colorJsonPath": "$.description"
+    }
+  }]
 }

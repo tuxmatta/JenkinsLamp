@@ -1,0 +1,46 @@
+{
+    "assignedLabels": [{}],
+    "mode": "NORMAL",
+    "nodeDescription": "the master Jenkins node",
+    "nodeName": "",
+    "numExecutors": 4,
+    "description": null,
+    "jobs": [{
+        "name": "s16-backend",
+        "url": "https://jenkins.bls.ch/job/s16-backend/",
+        "color": "blue"
+    }, {
+        "name": "s16-backend-release",
+        "url": "https://jenkins.bls.ch/job/s16-backend-release/",
+        "color": "blue_anime"
+    }, {
+        "name": "s16-backend-test",
+        "url": "https://jenkins.bls.ch/job/s16-backend-test/",
+        "color": "red"
+    }, {
+        "name": "s16-sh",
+        "url": "https://jenkins.bls.ch/job/s16-sh/",
+        "color": "blue"
+    }, {
+        "name": "s16-soap-ui",
+        "url": "https://jenkins.bls.ch/job/s16-soap-ui/",
+        "color": "blue"
+    }],
+    "overallLoad": {},
+    "primaryView": {
+        "name": "All",
+        "url": "https://jenkins.bls.ch/"
+    },
+    "quietingDown": false,
+    "slaveAgentPort": 49501,
+    "unlabeledLoad": {},
+    "useCrumbs": false,
+    "useSecurity": true,
+    "views": [{
+        "name": "All",
+        "url": "https://jenkins.bls.ch/"
+    }, {
+        "name": "s16",
+        "url": "https://jenkins.bls.ch/view/s16/"
+    }]
+}
